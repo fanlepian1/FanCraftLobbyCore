@@ -1,0 +1,2 @@
+# FanCraftLobbyCore
+FanCraft基于Minestom的大厅服务器
