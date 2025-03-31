@@ -1,26 +1,37 @@
 package cn.fancraft.lobby;
 
+import cn.fancraft.lobby.Data.LoadConfig;
+import com.moandjiezana.toml.Toml;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.coordinate.Pos;
 public class Main {
+    public static Toml Config;
     public static void main(String[] args) {
-        // åˆ›å»ºMineCraftæœåŠ¡å™¨
+
+        // ³õÊ¼»¯º¯Êý
+        LoadConfig.loadConfig();
+        // ÅÐ¶ÏÐè²»ÐèÒªÊ¹ÓÃvelocity´úÀí
+        if (Config.getBoolean("velocity.enable")){
+            VelocityProxy.enable(Config.getString("velocity.secret"));
+            System.out.println("µ±Ç°ÕýÔÚÊ¹ÓÃVelocityÄ£Ê½£¡");
+        }
+        // ´´½¨MineCraft·þÎñÆ÷
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        // åˆ›å»ºä¸€ä¸ªå®žä¾‹
+        // ´´½¨Ò»¸öÊµÀý
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
 
-        // è®¾ç½®åŒºå—ç”Ÿæˆå™¨
+        // ÉèÖÃÇø¿éÉú³ÉÆ÷
         instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
 
-        // æ·»åŠ ä¸€ä¸ªçŽ©å®¶ç”Ÿæˆçš„äº‹ä»¶
+        // Ìí¼ÓÒ»¸öÍæ¼ÒÉú³ÉµÄÊÂ¼þ
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             final Player player = event.getPlayer();
@@ -30,6 +41,6 @@ public class Main {
         });
 
 
-        minecraftServer.start("0.0.0.0", 25565);
+        minecraftServer.start(Config.getString("server.host"), Math.toIntExact(Config.getLong("server.port")));
     }
 }

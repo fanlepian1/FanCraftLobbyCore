@@ -20,7 +20,8 @@ repositories {
 }
 
 dependencies {
-    implementation("net.minestom:minestom-snapshots:1_21_5-0473b41b2a")
+    implementation ("net.minestom:minestom-snapshots:1_21_5-0473b41b2a")
+    implementation ("com.moandjiezana.toml:toml4j:0.7.2")
 }
 
 tasks.test {
